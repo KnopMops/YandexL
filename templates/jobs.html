@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-4">Список работ</h1>
+
+{% for job in jobs %}
+<div class="card mb-4">
+	<div class="card-header bg-primary text-white">
+		<h3>Работа #{{ job.id }}</h3>
+	</div>
+	<div class="card-body">
+		<table class="table table-bordered">
+			<tr>
+				<th>Название работы</th>
+				<td>{{ job.job }}</td>
+			</tr>
+			<tr>
+				<th>Ответственный</th>
+				<td>{{ job.leader.surname }} {{ job.leader.name }}</td>
+			</tr>
+			<tr>
+				<th>Продолжительность (часов)</th>
+				<td>{{ job.work_size }}</td>
+			</tr>
+			<tr>
+				<th>Команда (ID)</th>
+				<td>{{ job.collaborators }}</td>
+			</tr>
+			<tr>
+				<th>Завершена</th>
+				<td>{{ "Да" if job.is_finished else "Нет" }}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+{% endfor %} {% endblock %}
