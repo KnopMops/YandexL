@@ -4,75 +4,27 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from conn import SqlAlchemyBase
-
-# from jobs import Jobs
+from jobs import Jobs
 from users import User
 
 
 def main():
     engine = create_engine("sqlite:///mars_explorer.db")
     SqlAlchemyBase.metadata.create_all(engine)
-
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    captain = User(
-        surname="Scott",
-        name="Ridley",
-        age=21,
-        position="captain",
-        speciality="research engineer",
-        address="module_1",
-        email="scott_chief@mars.org",
-        hashed_password="cap",
-        modified_date=datetime.datetime.now(),
-    )
+    job = Jobs()
+    job.team_leader = 1
+    job.job = "deployment of residential modules 1 and 2"
+    job.work_size = 15
+    job.collaborators = "2, 3"
+    job.start_date = datetime.datetime.now()
+    job.is_finished = False
 
-    session.add(captain)
-
-    colonist1 = User(
-        surname="Armstrong",
-        name="Neil",
-        age=35,
-        position="engineer",
-        speciality="mechanical engineer",
-        address="module_2",
-        email="neil.armstrong@mars.org",
-        hashed_password="neil123",
-        modified_date=datetime.datetime.now(),
-    )
-
-    session.add(colonist1)
-
-    colonist2 = User(
-        surname="Aldrin",
-        name="Buzz",
-        age=38,
-        position="pilot",
-        speciality="flight engineer",
-        address="module_3",
-        email="buzz.aldrin@mars.org",
-        hashed_password="buzz456",
-        modified_date=datetime.datetime.now(),
-    )
-
-    session.add(colonist2)
-
-    colonist3 = User(
-        surname="Collins",
-        name="Michael",
-        age=42,
-        position="scientist",
-        speciality="geologist",
-        address="module_1",
-        email="michael.collins@mars.org",
-        hashed_password="mike789",
-        modified_date=datetime.datetime.now(),
-    )
-
-    session.add(colonist3)
-
+    session.add(job)
     session.commit()
+
     session.close()
 
 
