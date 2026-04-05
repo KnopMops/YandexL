@@ -117,9 +117,15 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         key = event.key()
         if key == Qt.Key.Key_PageUp:
-            self.web_view.page().runJavaScript("zoomIn();")
+            self.web_view.page().runJavaScript("""
+                var z = map.getZoom();
+                if (z < 19) map.setZoom(z + 1);
+            """)
         elif key == Qt.Key.Key_PageDown:
-            self.web_view.page().runJavaScript("zoomOut();")
+            self.web_view.page().runJavaScript("""
+                var z = map.getZoom();
+                if (z > 1) map.setZoom(z - 1);
+            """)
         elif key == Qt.Key.Key_Up:
             self.web_view.page().runJavaScript("move(0, 0.1);")
         elif key == Qt.Key.Key_Down:
