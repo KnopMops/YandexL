@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
 
         self.search_edit = QLineEdit()
         self.search_edit.setPlaceholderText("Введите название объекта...")
+        self.search_edit.returnPressed.connect(self.on_search)
         control_layout.addWidget(QLabel("Поиск:"))
         control_layout.addWidget(self.search_edit)
 
@@ -117,22 +118,16 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, event):
         key = event.key()
         if key == Qt.Key.Key_PageUp:
-            self.web_view.page().runJavaScript("""
-                var z = map.getZoom();
-                if (z < 19) map.setZoom(z + 1);
-            """)
+            self.web_view.page().runJavaScript("zoomIn();")
         elif key == Qt.Key.Key_PageDown:
-            self.web_view.page().runJavaScript("""
-                var z = map.getZoom();
-                if (z > 1) map.setZoom(z - 1);
-            """)
+            self.web_view.page().runJavaScript("zoomOut();")
         elif key == Qt.Key.Key_Up:
-            self.web_view.page().runJavaScript("move(0, 0.1);")
+            self.web_view.page().runJavaScript("move(0, 1);")
         elif key == Qt.Key.Key_Down:
-            self.web_view.page().runJavaScript("move(0, -0.1);")
+            self.web_view.page().runJavaScript("move(0, -1);")
         elif key == Qt.Key.Key_Left:
-            self.web_view.page().runJavaScript("move(-0.1, 0);")
+            self.web_view.page().runJavaScript("move(-1, 0);")
         elif key == Qt.Key.Key_Right:
-            self.web_view.page().runJavaScript("move(0.1, 0);")
+            self.web_view.page().runJavaScript("move(1, 0);")
         else:
             super().keyPressEvent(event)

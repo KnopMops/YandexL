@@ -165,11 +165,14 @@ HTML_TEMPLATE = f"""
         }}
 
         function zoomIn() {{
-            map.setZoom(map.getZoom() + 1);
+            var z = map.getZoom();
+            if (z < 19) map.setZoom(z + 1);
         }}
         function zoomOut() {{
-            map.setZoom(map.getZoom() - 1);
+            var z = map.getZoom();
+            if (z > 1) map.setZoom(z - 1);
         }}
+
         function move(dx, dy) {{
             var bounds = map.getBounds();
             var sw = bounds.getSouthWest();
