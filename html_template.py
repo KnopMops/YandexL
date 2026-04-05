@@ -60,7 +60,6 @@ HTML_TEMPLATE = f"""
                     currentPostalCode = postalCode;
                     updateAddressDisplay();
                     if (bridge) bridge.updateAddress(address + (postalCode ? ", " + postalCode : ""));
-                    map.setCenter(pointCoords);
                 }}
             }});
         }}
