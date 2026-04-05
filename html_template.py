@@ -171,12 +171,20 @@ HTML_TEMPLATE = f"""
             map.setZoom(map.getZoom() - 1);
         }}
         function move(dx, dy) {{
+            var bounds = map.getBounds();
+            var sw = bounds.getSouthWest();
+            var ne = bounds.getNorthEast();
+            var width = ne.getLng() - sw.getLng();
+            var height = ne.getLat() - sw.getLat();
+
             var center = map.getCenter();
-            var zoom = map.getZoom();
-            var latStep = 360 / Math.pow(2, zoom) * dy;
-            var lonStep = 360 / Math.pow(2, zoom) * dx;
-            var newCenter = [center[0] + latStep, center[1] + lonStep];
-            map.setCenter(newCenter);
+            var newLng = center.getLng() + dx * width;
+            var newLat = center.getLat() + dy * height;
+
+            newLng = Math.min(180, Math.max(-180, newLng));
+            newLat = Math.min(85, Math.max(-85, newLat));
+
+            map.setCenter([newLat, newLng]);
         }}
 
         ymaps.ready(init);
