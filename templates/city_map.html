@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Карта города колониста</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Arial', sans-serif;
+				background-color: #1a1a2e;
+				color: #eee;
+			}
+			.header {
+				text-align: center;
+				padding: 20px 0 10px;
+			}
+			h1 {
+				margin: 0;
+				font-size: 2.5em;
+				text-transform: uppercase;
+				letter-spacing: 2px;
+				color: #f2a365;
+			}
+			.subtitle {
+				font-style: italic;
+				color: #ccc;
+				margin: 5px 0 15px;
+			}
+			.nostalgy-block {
+				text-align: center;
+				margin: 20px 0;
+			}
+			.nostalgy {
+				font-size: 1.8em;
+				font-weight: bold;
+				color: #e2c275;
+			}
+			.colonist-name {
+				font-size: 1.6em;
+				margin: 5px 0;
+			}
+			.hometown {
+				font-size: 1.4em;
+				color: #bbb;
+			}
+			#map {
+				width: 100%;
+				height: 500px;
+				margin: 20px 0;
+				border-radius: 10px;
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+			}
+			.footer {
+				text-align: center;
+				padding: 20px;
+				font-size: 0.8em;
+				color: #888;
+				border-top: 1px solid #333;
+			}
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0 20px;
+			}
+		</style>
+		<script
+			src="https://api-maps.yandex.ru/2.1/?apikey={{ api_key }}&lang=ru_RU"
+			type="text/javascript"
+		></script>
+		<script type="text/javascript">
+			ymaps.ready(init)
+
+			function init() {
+				var cityName = '{{ city }}'
+				var geocoder = ymaps.geocode(cityName, { results: 1 })
+
+				geocoder
+					.then(function (res) {
+						var firstGeoObject = res.geoObjects.get(0)
+						var coords = firstGeoObject.geometry.getCoordinates()
+						var map = new ymaps.Map('map', {
+							center: coords,
+							zoom: 10,
+							controls: ['zoomControl', 'typeSelector', 'fullscreenControl']
+						})
+
+						var placemark = new ymaps.Placemark(coords, {
+							balloonContent: '{{ surname }} {{ name }}<br>Город: {{ city }}'
+						})
+						map.geoObjects.add(placemark)
+					})
+					.catch(function (err) {
+						console.warn('Город не найден:', err)
+						var map = new ymaps.Map('map', {
+							center: [55.76, 37.64],
+							zoom: 5
+						})
+						map.geoObjects.add(
+							new ymaps.Placemark([55.76, 37.64], {
+								balloonContent: 'Город не определён, показана Москва'
+							})
+						)
+					})
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>Миссия Колонизация Марса</h1>
+				<div class="subtitle">И на Марсе будут яблони цвести!</div>
+			</div>
+
+			<div class="nostalgy-block">
+				<div class="nostalgy">Nostalgy</div>
+				<div class="colonist-name">{{ surname }} {{ name }}</div>
+				<div class="hometown">Hometown {{ city }}</div>
+			</div>
+
+			<div id="map"></div>
+
+			<div class="footer">
+				© GeoEye, Inc., Antrim Corporation Ltd., Earthstar Geographics, ©
+				European Space Imaging GmbH<br />
+				Image © 2012 DigitalGlobe, Inc., Image © 2018 DigitalGlobe, Inc.,
+				Includes material © DigitalGlobe, Inc.
+			</div>
+		</div>
+	</body>
+</html>
