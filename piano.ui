@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Фортепиано</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="titleLabel">
+      <property name="text">
+       <string>Нажмите на кнопку или используйте клавиши A S D F G H J</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="btnC">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>До
+(A)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnD">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Ре
+(S)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnE">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Ми
+(D)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnF">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Фа
+(F)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnG">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Соль
+(G)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnA">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Ля
+(H)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnB">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>120</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton { background-color: white; border: 2px solid black; border-radius: 5px; font-size: 14px; font-weight: bold; } QPushButton:pressed { background-color: lightblue; }</string>
+        </property>
+        <property name="text">
+         <string>Си
+(J)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
