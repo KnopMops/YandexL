@@ -1,5 +1,15 @@
 {% extends "base.html" %} {% block content %}
 <h2>Works log</h2>
+<div class="mb-3">
+	<a href="{{ url_for('departments') }}" class="btn btn-info"
+		>List of Departments</a
+	>
+	{% if current_user.is_authenticated %}
+	<a href="{{ url_for('add_job') }}" class="btn btn-secondary ml-2"
+		>Добавить работу</a
+	>
+	{% endif %}
+</div>
 {% if current_user.is_authenticated %}
 <a href="{{ url_for('add_job') }}" class="btn btn-secondary mb-3"
 	>Добавить работу</a
