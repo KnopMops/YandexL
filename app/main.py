@@ -126,6 +126,59 @@ def add_job():
     return render_template("add_job.html", title="Adding a Job", form=form)
 
 
+@app.route("/edit_job/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_job(id):
+    form = JobForm()
+
+    db_sess = db_session.create_session()
+    job = db_sess.query(Job).filter(Job.id == id).first()
+
+    if not job:
+        abort(404)
+
+    if job.user_id != current_user.id and current_user.id != 1:
+        abort(403)
+
+    if request.method == "GET":
+        form.title.data = job.title
+        form.team_leader_id.data = job.team_leader_id
+        form.work_size.data = job.work_size
+        form.collaborators.data = job.collaborators
+        form.is_finished.data = job.is_finished
+
+    if form.validate_on_submit():
+        job.title = form.title.data
+        job.team_leader_id = form.team_leader_id.data
+        job.work_size = form.work_size.data
+        job.collaborators = form.collaborators.data
+        job.is_finished = form.is_finished.data
+
+        db_sess.commit()
+
+        return redirect("/")
+
+    return render_template("add_job.html", title="Редактирование работы", form=form)
+
+
+@app.route("/delete_job/<int:id>", methods=["GET", "POST"])
+@login_required
+def delete_job(id):
+    db_sess = db_session.create_session()
+    job = db_sess.query(Job).filter(Job.id == id).first()
+
+    if not job:
+        abort(404)
+
+    if job.user_id != current_user.id and current_user.id != 1:
+        abort(403)
+
+    db_sess.delete(job)
+    db_sess.commit()
+
+    return redirect("/")
+
+
 if __name__ == "__main__":
     if not os.path.exists("db"):
         os.makedirs("db")

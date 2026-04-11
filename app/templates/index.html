@@ -1,7 +1,9 @@
 {% extends "base.html" %} {% block content %}
 <h2>Works log</h2>
 {% if current_user.is_authenticated %}
-<a href="/add_job" class="btn btn-secondary mb-3">Добавить работу</a>
+<a href="{{ url_for('add_job') }}" class="btn btn-secondary mb-3"
+	>Добавить работу</a
+>
 {% endif %} {% for job in jobs %}
 <h3>Action # {{ loop.index }}</h3>
 <table class="table table-bordered">
@@ -20,8 +22,19 @@
 			<td>{{ job.team_leader.surname }} {{ job.team_leader.name }}</td>
 			<td>{{ job.work_size }} hours</td>
 			<td>{{ job.collaborators }}</td>
-			<td>{{ "Is finished" if job.is_finished else "Is not finished" }}</td>
+			<td>{{ "Finished" if job.is_finished else "Is not finished" }}</td>
 		</tr>
 	</tbody>
 </table>
-{% endfor %} {% endblock %}
+{% if current_user.is_authenticated and (current_user.id == job.user_id or
+current_user.id == 1) %}
+<div>
+	<a href="{{ url_for('edit_job', id=job.id) }}" class="btn btn-warning"
+		>Edit Job</a
+	>
+	<a href="{{ url_for('delete_job', id=job.id) }}" class="btn btn-danger"
+		>Delete job</a
+	>
+</div>
+<br />
+{% endif %} {% endfor %} {% endblock %}
