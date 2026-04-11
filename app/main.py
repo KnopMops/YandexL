@@ -11,6 +11,7 @@ from flask_login import (
 )
 
 from .data import db_session
+from .data.categories import Category
 from .data.departments import Department
 from .data.jobs import Job
 from .data.users import User
@@ -32,7 +33,6 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-
     return db_sess.get(User, user_id)
 
 
@@ -40,26 +40,21 @@ def load_user(user_id):
 def index():
     db_sess = db_session.create_session()
     jobs = db_sess.query(Job).all()
-
     return render_template("index.html", jobs=jobs)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
-
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
-
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-
         return render_template(
             "login.html", message="Неправильный логин или пароль", form=form
         )
-
     return render_template("login.html", title="Авторизация", form=form)
 
 
@@ -67,17 +62,14 @@ def login():
 @login_required
 def logout():
     logout_user()
-
     return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
-
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template(
                 "register.html",
@@ -85,7 +77,6 @@ def register():
                 form=form,
                 message="Такой пользователь уже есть",
             )
-
         user = User(
             name=form.name.data,
             surname=form.surname.data,
@@ -95,13 +86,10 @@ def register():
             speciality=form.speciality.data,
             address=form.address.data,
         )
-
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-
         return redirect("/login")
-
     return render_template("register.html", title="Регистрация", form=form)
 
 
@@ -109,22 +97,23 @@ def register():
 @login_required
 def add_job():
     form = JobForm()
+    db_sess = db_session.create_session()
+    form.categories.choices = [(c.id, c.name) for c in db_sess.query(Category).all()]
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
         job = Job()
-
         job.title = form.title.data
         job.team_leader_id = form.team_leader_id.data
         job.work_size = form.work_size.data
         job.collaborators = form.collaborators.data
         job.is_finished = form.is_finished.data
         job.user_id = current_user.id
-
+        selected_categories = (
+            db_sess.query(Category).filter(Category.id.in_(form.categories.data)).all()
+        )
+        job.categories = selected_categories
         db_sess.add(job)
         db_sess.commit()
-
         return redirect("/")
-
     return render_template("add_job.html", title="Adding a Job", form=form)
 
 
@@ -132,13 +121,11 @@ def add_job():
 @login_required
 def edit_job(id):
     form = JobForm()
-
     db_sess = db_session.create_session()
+    form.categories.choices = [(c.id, c.name) for c in db_sess.query(Category).all()]
     job = db_sess.query(Job).filter(Job.id == id).first()
-
     if not job:
         abort(404)
-
     if job.user_id != current_user.id and current_user.id != 1:
         abort(403)
 
@@ -148,6 +135,7 @@ def edit_job(id):
         form.work_size.data = job.work_size
         form.collaborators.data = job.collaborators
         form.is_finished.data = job.is_finished
+        form.categories.data = [c.id for c in job.categories]
 
     if form.validate_on_submit():
         job.title = form.title.data
@@ -155,11 +143,12 @@ def edit_job(id):
         job.work_size = form.work_size.data
         job.collaborators = form.collaborators.data
         job.is_finished = form.is_finished.data
-
+        selected_categories = (
+            db_sess.query(Category).filter(Category.id.in_(form.categories.data)).all()
+        )
+        job.categories = selected_categories
         db_sess.commit()
-
         return redirect("/")
-
     return render_template("add_job.html", title="Редактирование работы", form=form)
 
 
@@ -168,16 +157,12 @@ def edit_job(id):
 def delete_job(id):
     db_sess = db_session.create_session()
     job = db_sess.query(Job).filter(Job.id == id).first()
-
     if not job:
         abort(404)
-
     if job.user_id != current_user.id and current_user.id != 1:
         abort(403)
-
     db_sess.delete(job)
     db_sess.commit()
-
     return redirect("/")
 
 
@@ -250,5 +235,4 @@ def delete_department(id):
 if __name__ == "__main__":
     if not os.path.exists("db"):
         os.makedirs("db")
-
     app.run(port=8080, host="127.0.0.1", debug=True)

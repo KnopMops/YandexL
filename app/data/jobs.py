@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 
+from .categories import association_table
 from .db_session import SqlAlchemyBase
 
 
@@ -16,3 +17,7 @@ class Job(SqlAlchemyBase):
     is_finished = sa.Column(sa.Boolean, default=False)
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     user = orm.relationship("User", foreign_keys=[user_id])
+
+    categories = orm.relationship(
+        "Category", secondary=association_table, backref="jobs"
+    )
