@@ -1,0 +1,14 @@
+[project]
+name = "yandexl"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.3",
+    "flask-login>=0.6.3",
+    "flask-wtf>=1.2.2",
+    "sqlalchemy>=2.0.49",
+    "werkzeug>=3.1.8",
+    "wtforms>=3.2.1",
+]
