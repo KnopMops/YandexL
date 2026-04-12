@@ -11,7 +11,6 @@ api = Api(app)
 
 def main():
     db_session.global_init("data/db/blogs.sqlite")
-    # Регистрация ресурсов
     api.add_resource(users_resources.UsersListResource, "/api/v2/users")
     api.add_resource(users_resources.UsersResource, "/api/v2/users/<int:user_id>")
     api.add_resource(jobs_resources.JobsListResource, "/api/v2/jobs")
